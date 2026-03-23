@@ -2,6 +2,17 @@
 
 ---
 
+## 项目信息
+
+**GitHub 仓库**: https://github.com/bimongl-coder/Jarvis-Voice-Assistant
+
+**克隆命令**:
+```bash
+git clone https://github.com/bimongl-coder/Jarvis-Voice-Assistant.git
+```
+
+---
+
 ## 2026-03-23 22:30 (自主记录)
 
 ### 执行动作
