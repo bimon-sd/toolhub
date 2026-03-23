@@ -5,12 +5,12 @@
 ### Phase 1: 核心引擎
 - [x] 项目结构搭建
 - [x] 状态机实现 (OFF/ON/TYPING)
-- [ ] 音频采集模块 (VAD + 麦克风)
-- [ ] 意图判断模块 (Layer1 命令词 + Layer2 LLM)
+- [x] 音频采集模块 (VAD + 麦克风)
+- [x] 意图判断模块 (Layer1 命令词 + Layer2 LLM)
 
 ### Phase 2: Provider 实现
-- [ ] STT Provider 接口实现
-- [ ] LLM Provider 接口实现  
+- [x] STT Provider 接口实现
+- [x] LLM Provider 接口实现  
 - [ ] TTS Provider (Edge TTS) 实现
 
 ### Phase 3: 记忆系统
@@ -25,9 +25,9 @@
 - [ ] 动态记忆注入
 
 ### Phase 5: AHK 执行模块
-- [ ] 动作集定义
-- [ ] 软件扫描器
-- [ ] 命令解析器
+- [x] 动作集定义
+- [x] 软件扫描器
+- [x] 命令解析器
 
 ### Phase 6: UI 组件
 - [ ] 小圆点托盘图标
