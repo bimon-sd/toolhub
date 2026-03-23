@@ -11,7 +11,7 @@
 ### Phase 2: Provider 实现
 - [x] STT Provider 接口实现
 - [x] LLM Provider 接口实现  
-- [ ] TTS Provider (Edge TTS) 实现
+- [x] TTS Provider (Edge TTS) 实现
 
 ### Phase 3: 记忆系统
 - [x] 记忆管理器基础实现
