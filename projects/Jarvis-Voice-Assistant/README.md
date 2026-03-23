@@ -30,17 +30,49 @@
 ## 项目结构
 
 ```
-jarvis-voice-assistant/
-├── src/
-│   ├── core/           # 核心引擎
-│   ├── providers/      # STT/LLM/TTS 实现
-│   ├── ahk/            # AHK 执行模块
-│   ├── personality/    # 人设系统
-│   ├── memory/         # 记忆系统
-│   └── ui/             # 小圆点 UI
-├── config/             # 配置文件
-├── tests/              # 测试
-└── docs/               # 文档
+Jarvis-Voice-Assistant/
+├── AGENT_PROTOCOL.md       # AI 开发协议
+├── TODO.md                 # 任务清单
+├── ERROR_HISTORY.md        # 错误记录库
+├── DEVELOPMENT_LOG.md      # 开发日志
+├── README.md               # 项目说明
+│
+├── config/
+│   ├── config.json         # 主配置文件
+│   └── software_cache.json # 软件扫描缓存
+│
+├── docs/
+│   └── 开发文档.md          # 详细开发文档
+│
+└── src/
+    ├── __init__.py
+    ├── main.py             # 主入口
+    │
+    ├── core/               # 核心模块
+    │   ├── state.py        #   状态机 (OFF/ON/TYPING)
+    │   ├── audio.py        #   音频采集 (VAD)
+    │   └── intent.py       #   意图判断 (Layer1+2)
+    │
+    ├── providers/          # Provider 实现
+    │   ├── base.py         #   接口规范 (ABC)
+    │   ├── stt/
+    │   │   └── local.py    #   STT: CapsWriter/Whisper
+    │   ├── llm/
+    │   │   └── api.py      #   LLM: DeepSeek/OpenAI
+    │   └── tts/
+    │       └── edge.py     #   TTS: Edge TTS/Local
+    │
+    ├── memory/
+    │   └── manager.py      # 记忆系统 (短期/长期)
+    │
+    ├── personality/
+    │   └── loader.py       # 人设加载器
+    │
+    ├── ahk/
+    │   └── executor.py     # AHK 执行器 (动作+对象)
+    │
+    └── ui/
+        └── tray.py         # 小圆点托盘组件
 ```
 
 ## 安装
