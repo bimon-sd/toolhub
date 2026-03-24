@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>G-Reader</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            neonGreen: '#00FF00',
+            darkGray: '#121212',
+            borderGray: '#2A2A2A',
+            nearWhite: '#E0E0E0',
+          },
+          fontFamily: {
+            mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+            sans: ['Public Sans', 'Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      background-color: transparent;
+      color: #ffffff;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Public Sans', sans-serif;
+    }
+    .utility-window {
+      width: 800px;
+      height: 520px;
+      min-width: 600px;
+      min-height: 400px;
+      max-width: 800px;
+      max-height: 520px;
+      background-color: #000000;
+      border: 1px solid #2A2A2A;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      resize: both;
+      overflow: hidden;
+      position: relative;
+      border-radius: 16px;
+      clip-path: inset(0 round 16px);
+    }
+    .resize-handle {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 16px;
+      height: 16px;
+      cursor: nwse-resize;
+      pointer-events: none;
+      opacity: 0;
+    }
+     header {
+       -webkit-app-region: drag;
+       cursor: move;
+     }
+     header button, header h1, header svg, header select, section select, header div {
+       -webkit-app-region: no-drag;
+       cursor: default;
+     }
+     header button {
+       cursor: pointer !important;
+       pointer-events: auto !important;
+     }
+     header button * {
+       pointer-events: none;
+     }
+     ::-webkit-scrollbar { display: none; }
+    html, body, .utility-window, section {
+      overflow: hidden !important;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    /* textarea 允许自由滚动，响应鼠标滚轮 */
+    textarea {
+      overflow-y: scroll !important;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    textarea::-webkit-scrollbar {
+      width: 0;
+      background: transparent;
+    }
+    select option {
+      background-color: #121212 !important;
+      color: #00FF00 !important;
+    }
+    /* 语音选择下拉菜单固定高度，支持滚动 */
+    #voice-select {
+      max-height: 280px;
+      overflow-y: auto;
+    }
+    #voice-select option {
+      padding: 4px 8px;
+    }
+    /* 隐形滚动条样式 */
+    .scrollbar-thin::-webkit-scrollbar {
+      width: 4px;
+    }
+    .scrollbar-thin::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+      background: #2A2A2A;
+      border-radius: 2px;
+    }
+    .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+      background: #3A3A3A;
+    }
+    /* Firefox */
+    .scrollbar-thin {
+      scrollbar-width: thin;
+      scrollbar-color: #2A2A2A transparent;
+    }
+  </style>
+</head>
+<body class="font-sans">
+<main class="utility-window flex flex-col overflow-hidden relative">
+<header class="flex justify-between items-center px-6 py-2.5 border-b border-[#333333]">
+<div class="flex items-center space-x-3">
+<svg class="h-6 w-6 text-neonGreen" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<h1 class="text-[13px] font-black tracking-[0.15em] text-nearWhite">G-Reader   V1.0</h1>
+</div>
+<div class="flex space-x-4 text-nearWhite/70">
+<button class="hover:text-neonGreen transition-colors p-1 -m-1" id="btn-settings" title="Settings">
+<svg class="h-4 w-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<div class="flex space-x-1.5 border-l border-borderGray pl-4 ml-2 items-center">
+<button class="w-2.5 h-2.5 rounded-full bg-borderGray hover:bg-yellow-500 transition-colors" id="btn-minimize" title="Minimize"></button>
+<button class="w-2.5 h-2.5 rounded-full bg-borderGray hover:bg-green-500 transition-colors" id="btn-maximize" title="Maximize"></button>
+<button class="w-2.5 h-2.5 rounded-full bg-red-900/80 hover:bg-red-500 transition-colors" id="btn-close" title="Close"></button>
+</div>
+</div>
+</header>
+<section class="px-8 py-3.5 bg-darkGray/30">
+<div class="flex items-start justify-between">
+<div class="flex items-center flex-grow">
+<div class="flex flex-col">
+<label class="text-nearWhite uppercase font-bold mb-1 tracking-widest text-[11px]">Select Language</label>
+<select class="bg-transparent border-none text-neonGreen font-bold focus:ring-0 p-0 pl-2 cursor-pointer hover:text-white transition-colors text-[11px]" id="language-select">
+<option value="zh-CN">Chinese (Mandarin)</option>
+<option value="zh-TW">Chinese (Taiwan)</option>
+<option value="zh-HK">Chinese (Cantonese)</option>
+<option value="en-US">English (US)</option>
+<option value="en-GB">English (UK)</option>
+<option value="en-AU">English (Australia)</option>
+<option value="en-CA">English (Canada)</option>
+<option value="en-IN">English (India)</option>
+<option value="ja-JP">Japanese</option>
+<option value="ko-KR">Korean</option>
+<option value="es-ES">Spanish (Spain)</option>
+<option value="es-MX">Spanish (Mexico)</option>
+<option value="fr-FR">French (France)</option>
+<option value="fr-CA">French (Canada)</option>
+<option value="de-DE">German</option>
+<option value="it-IT">Italian</option>
+<option value="pt-BR">Portuguese (Brazil)</option>
+<option value="pt-PT">Portuguese (Portugal)</option>
+</select>
+</div>
+<div class="flex flex-col ml-24">
+<label class="text-nearWhite uppercase font-bold mb-1 tracking-widest text-[11px]">Select Voice Profile</label>
+<select class="bg-transparent border-none text-neonGreen font-bold focus:ring-0 p-0 pl-2 cursor-pointer hover:text-white transition-colors text-[11px]" id="voice-select">
+<option value="zh-CN-XiaoxiaoNeural">晓晓 Xiaoxiao (女)</option>
+</select>
+</div>
+</div>
+<div class="flex flex-col items-end -mt-1">
+<button class="flex items-center space-x-2 text-nearWhite border border-borderGray px-3 py-1.5 rounded-md hover:bg-borderGray transition-all text-[10px] font-bold uppercase tracking-widest" id="btn-save">
+<svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Save To</span>
+</button>
+<div class="text-[10px] text-gray-500 font-medium mt-1" id="save-path-display">Not set</div>
+</div>
+</div>
+</section>
+<section class="flex-grow flex flex-col p-6 pb-2 space-y-2">
+<div class="flex justify-between items-end px-1">
+<span class="text-[12px] font-bold text-neonGreen uppercase tracking-widest">Input Buffer</span>
+<span class="text-[11px] font-semibold text-nearWhite" id="char-count">0 chars</span>
+</div>
+<div class="relative flex-grow group">
+<div class="absolute -inset-0.5 bg-neonGreen/5 rounded-xl blur opacity-20 group-focus-within:opacity-100 transition duration-500"></div>
+<textarea class="relative w-full h-full bg-darkGray border border-borderGray rounded-xl p-6 text-gray-100 placeholder-nearWhite/30 focus:outline-none focus:border-neonGreen/40 focus:ring-0 transition-all font-sans font-medium text-sm leading-relaxed resize-none overflow-y-auto scrollbar-thin scrollbar-thumb-borderGray scrollbar-track-transparent" id="tts-input" placeholder="ENTER TEXT TO SYNTHESIZE..."></textarea>
+</div>
+</section>
+<footer class="flex justify-between items-center px-8 py-4 bg-darkGray/50">
+<div class="flex flex-col">
+<div class="flex items-center justify-between mb-2">
+<label class="text-[10px] text-nearWhite uppercase font-bold tracking-widest">Velocity</label>
+<span class="text-[11px] font-bold text-neonGreen" id="velocity-value">1.0x</span>
+</div>
+<input class="w-32 h-1 bg-borderGray rounded-lg appearance-none cursor-pointer accent-neonGreen" type="range" min="0.5" max="2" step="0.1" value="1" id="velocity-slider"/>
+</div>
+<div class="flex space-x-4 items-center">
+<button class="neon-glow flex items-center space-x-3 bg-neonGreen text-black font-black px-6 py-2 rounded-lg hover:bg-white transition-all active:scale-[0.98] group" id="btn-play">
+<span class="text-[12px] uppercase font-black tracking-[0.2em]">Execute</span>
+<svg class="h-4 w-4 transform group-hover:translate-x-1 transition-transform" fill="currentColor" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" fill-rule="evenodd"></path>
+</svg>
+</button>
+</div>
+</footer>
+<div class="resize-handle">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<line x1="21" x2="15" y1="15" y2="21"></line>
+<line x1="21" x2="10" y1="10" y2="21"></line>
+</svg>
+</div>
+</main>
+<script>
+    const { invoke } = window.__TAURI__.core;
+
+    // Azure Neural TTS 完整语音列表（支持多语言、多风格）
+    const azureVoicesByLanguage = {
+        'zh-CN': [
+            { value: 'zh-CN-XiaoxiaoNeural', label: '晓晓 Xiaoxiao (女) - 多风格', styles: ['general', 'assistant', 'chat', 'calm', 'angry', 'cheerful', 'sad'] },
+            { value: 'zh-CN-XiaoyiNeural', label: '晓伊 Xiaoyi (女) - 多风格', styles: ['general', 'angry', 'cheerful', 'sad'] },
+            { value: 'zh-CN-YunjianNeural', label: '云健 Yunjian (男) - 多风格', styles: ['general', 'narration'] },
+            { value: 'zh-CN-YunxiNeural', label: '云希 Yunxi (男) - 多风格', styles: ['general', 'assistant', 'chat', 'cheerful', 'sad', 'angry'] },
+            { value: 'zh-CN-YunxiaNeural', label: '云夏 Yunxia (男) - 多风格', styles: ['general', 'cheerful', 'angry', 'sad'] },
+            { value: 'zh-CN-YunyangNeural', label: '云扬 Yunyang (男) - 新闻', styles: ['general', 'customer service'] },
+            { value: 'zh-CN-liaoning-XiaobeiNeural', label: '晓北 Xiaobei (女) - 辽宁方言', styles: ['general'] },
+            { value: 'zh-CN-shaanxi-XiaoniNeural', label: '晓妮 Xiaoni (女) - 陕西方言', styles: ['general'] },
+        ],
+        'zh-TW': [
+            { value: 'zh-TW-HsiaoChenNeural', label: '晓晨 HsiaoChen (女)', styles: ['general'] },
+            { value: 'zh-TW-YunJheNeural', label: '云哲 YunJhe (男)', styles: ['general'] },
+            { value: 'zh-TW-HsiaoYuNeural', label: '晓雨 HsiaoYu (女)', styles: ['general'] },
+        ],
+        'zh-HK': [
+            { value: 'zh-HK-HiuGaaiNeural', label: '晓佳 HiuGaai (女)', styles: ['general'] },
+            { value: 'zh-HK-HiuMaanNeural', label: '晓曼 HiuMaan (女)', styles: ['general'] },
+            { value: 'zh-HK-WanLungNeural', label: '云龙 WanLung (男)', styles: ['general'] },
+        ],
+        'en-US': [
+            { value: 'en-US-JennyNeural', label: 'Jenny (女) - 多风格', styles: ['general', 'assistant', 'chat', 'customer service', 'newscast'] },
+            { value: 'en-US-AvaNeural', label: 'Ava (女) - 多情感', styles: ['general', 'angry', 'cheerful', 'sad', 'excited'] },
+            { value: 'en-US-AnaNeural', label: 'Ana (女) - 儿童', styles: ['general'] },
+            { value: 'en-US-AriaNeural', label: 'Aria (女) - 多风格', styles: ['general', 'narration', 'newscast'] },
+            { value: 'en-US-MichelleNeural', label: 'Michelle (女)', styles: ['general'] },
+            { value: 'en-US-RogerNeural', label: 'Roger (男)', styles: ['general'] },
+            { value: 'en-US-GuyNeural', label: 'Guy (男) - 新闻', styles: ['general', 'newscast'] },
+            { value: 'en-US-ChristopherNeural', label: 'Christopher (男)', styles: ['general'] },
+            { value: 'en-US-EricNeural', label: 'Eric (男)', styles: ['general'] },
+            { value: 'en-US-SteffanNeural', label: 'Steffan (男)', styles: ['general'] },
+            { value: 'en-US-AndrewNeural', label: 'Andrew (男) - 多风格', styles: ['general', 'chat', 'newscast'] },
+        ],
+        'en-GB': [
+            { value: 'en-GB-SoniaNeural', label: 'Sonia (女)', styles: ['general'] },
+            { value: 'en-GB-LibbyNeural', label: 'Libby (女)', styles: ['general'] },
+            { value: 'en-GB-MaisieNeural', label: 'Maisie (女) - 儿童', styles: ['general'] },
+            { value: 'en-GB-RyanNeural', label: 'Ryan (男)', styles: ['general'] },
+            { value: 'en-GB-ThomasNeural', label: 'Thomas (男)', styles: ['general'] },
+        ],
+        'en-AU': [
+            { value: 'en-AU-NatashaNeural', label: 'Natasha (女)', styles: ['general'] },
+            { value: 'en-AU-WilliamNeural', label: 'William (男)', styles: ['general'] },
+        ],
+        'en-CA': [
+            { value: 'en-CA-ClaraNeural', label: 'Clara (女)', styles: ['general'] },
+            { value: 'en-CA-LiamNeural', label: 'Liam (男)', styles: ['general'] },
+        ],
+        'en-IN': [
+            { value: 'en-IN-NeerjaNeural', label: 'Neerja (女)', styles: ['general'] },
+            { value: 'en-IN-PrabhatNeural', label: 'Prabhat (男)', styles: ['general'] },
+        ],
+        'ja-JP': [
+            { value: 'ja-JP-NanamiNeural', label: '七海 Nanami (女) - 多风格', styles: ['general', 'chat', 'cheerful', 'sad'] },
+            { value: 'ja-JP-KeitaNeural', label: '圭太 Keita (男)', styles: ['general'] },
+            { value: 'ja-JP-AoiNeural', label: '葵 Aoi (女)', styles: ['general'] },
+            { value: 'ja-JP-DaichiNeural', label: '大智 Daichi (男)', styles: ['general'] },
+            { value: 'ja-JP-MayuNeural', label: '真由 Mayu (女)', styles: ['general'] },
+            { value: 'ja-JP-NaokiNeural', label: '直树 Naoki (男)', styles: ['general'] },
+            { value: 'ja-JP-ShioriNeural', label: '栞 Shiori (女)', styles: ['general'] },
+        ],
+        'ko-KR': [
+            { value: 'ko-KR-SunHiNeural', label: '선희 Sun-Hi (女)', styles: ['general'] },
+            { value: 'ko-KR-InJoonNeural', label: '인준 InJoon (男)', styles: ['general'] },
+            { value: 'ko-KR-HyunsuNeural', label: '현수 Hyunsu (男)', styles: ['general'] },
+            { value: 'ko-KR-SoonBokNeural', label: '순복 SoonBok (女)', styles: ['general'] },
+        ],
+        'es-ES': [
+            { value: 'es-ES-ElviraNeural', label: 'Elvira (女)', styles: ['general'] },
+            { value: 'es-ES-AlvaroNeural', label: 'Alvaro (男)', styles: ['general'] },
+            { value: 'es-ES-AbrilNeural', label: 'Abril (女)', styles: ['general'] },
+            { value: 'es-ES-ArnauNeural', label: 'Arnau (男)', styles: ['general'] },
+            { value: 'es-ES-DarioNeural', label: 'Dario (男)', styles: ['general'] },
+            { value: 'es-ES-EliasNeural', label: 'Elias (男)', styles: ['general'] },
+            { value: 'es-ES-EstrellaNeural', label: 'Estrella (女)', styles: ['general'] },
+            { value: 'es-ES-IreneNeural', label: 'Irene (女)', styles: ['general'] },
+            { value: 'es-ES-LauraNeural', label: 'Laura (女)', styles: ['general'] },
+            { value: 'es-ES-LiaNeural', label: 'Lia (女)', styles: ['general'] },
+        ],
+        'es-MX': [
+            { value: 'es-MX-DaliaNeural', label: 'Dalia (女)', styles: ['general'] },
+            { value: 'es-MX-JorgeNeural', label: 'Jorge (男)', styles: ['general'] },
+            { value: 'es-MX-BeatrizNeural', label: 'Beatriz (女)', styles: ['general'] },
+            { value: 'es-MX-CandelaNeural', label: 'Candela (女)', styles: ['general'] },
+            { value: 'es-MX-CarlotaNeural', label: 'Carlota (女)', styles: ['general'] },
+            { value: 'es-MX-CecilioNeural', label: 'Cecilio (男)', styles: ['general'] },
+            { value: 'es-MX-GerardoNeural', label: 'Gerardo (男)', styles: ['general'] },
+            { value: 'es-MX-LarissaNeural', label: 'Larissa (女)', styles: ['general'] },
+            { value: 'es-MX-LibertoNeural', label: 'Liberto (男)', styles: ['general'] },
+            { value: 'es-MX-LucianoNeural', label: 'Luciano (男)', styles: ['general'] },
+            { value: 'es-MX-MarinaNeural', label: 'Marina (女)', styles: ['general'] },
+            { value: 'es-MX-NuriaNeural', label: 'Nuria (女)', styles: ['general'] },
+            { value: 'es-MX-PelayoNeural', label: 'Pelayo (男)', styles: ['general'] },
+            { value: 'es-MX-RenataNeural', label: 'Renata (女)', styles: ['general'] },
+            { value: 'es-MX-YagoNeural', label: 'Yago (男)', styles: ['general'] },
+        ],
+        'fr-FR': [
+            { value: 'fr-FR-DeniseNeural', label: 'Denise (女) - 多风格', styles: ['general', 'cheerful', 'sad'] },
+            { value: 'fr-FR-HenriNeural', label: 'Henri (男) - 多风格', styles: ['general', 'cheerful', 'sad'] },
+            { value: 'fr-FR-EloiseNeural', label: 'Eloise (女) - 儿童', styles: ['general'] },
+            { value: 'fr-FR-RemyMultilingualNeural', label: 'Remy (男) - 多语言', styles: ['general'] },
+            { value: 'fr-FR-VivienneMultilingualNeural', label: 'Vivienne (女) - 多语言', styles: ['general'] },
+        ],
+        'fr-CA': [
+            { value: 'fr-CA-SylvieNeural', label: 'Sylvie (女)', styles: ['general'] },
+            { value: 'fr-CA-AntoineNeural', label: 'Antoine (男)', styles: ['general'] },
+            { value: 'fr-CA-JeanNeural', label: 'Jean (男)', styles: ['general'] },
+        ],
+        'de-DE': [
+            { value: 'de-DE-KatjaNeural', label: 'Katja (女)', styles: ['general'] },
+            { value: 'de-DE-ConradNeural', label: 'Conrad (男)', styles: ['general'] },
+            { value: 'de-DE-AmalaNeural', label: 'Amala (女)', styles: ['general'] },
+            { value: 'de-DE-BerndNeural', label: 'Bernd (男)', styles: ['general'] },
+            { value: 'de-DE-ChristophNeural', label: 'Christoph (男)', styles: ['general'] },
+            { value: 'de-DE-ElkeNeural', label: 'Elke (女)', styles: ['general'] },
+            { value: 'de-DE-GiselaNeural', label: 'Gisela (女) - 儿童', styles: ['general'] },
+            { value: 'de-DE-KasperNeural', label: 'Kasper (男)', styles: ['general'] },
+            { value: 'de-DE-KillianNeural', label: 'Killian (男)', styles: ['general'] },
+            { value: 'de-DE-KlarissaNeural', label: 'Klarissa (女)', styles: ['general'] },
+            { value: 'de-DE-KlausNeural', label: 'Klaus (男)', styles: ['general'] },
+            { value: 'de-DE-LouisaNeural', label: 'Louisa (女)', styles: ['general'] },
+            { value: 'de-DE-MajaNeural', label: 'Maja (女)', styles: ['general'] },
+            { value: 'de-DE-RalfNeural', label: 'Ralf (男)', styles: ['general'] },
+            { value: 'de-DE-TanjaNeural', label: 'Tanja (女)', styles: ['general'] },
+        ],
+        'it-IT': [
+            { value: 'it-IT-ElsaNeural', label: 'Elsa (女)', styles: ['general'] },
+            { value: 'it-IT-IsabellaNeural', label: 'Isabella (女)', styles: ['general'] },
+            { value: 'it-IT-DiegoNeural', label: 'Diego (男)', styles: ['general'] },
+            { value: 'it-IT-BenignoNeural', label: 'Benigno (男)', styles: ['general'] },
+            { value: 'it-IT-CalimeroNeural', label: 'Calimero (男)', styles: ['general'] },
+            { value: 'it-IT-CataldoNeural', label: 'Cataldo (男)', styles: ['general'] },
+            { value: 'it-IT-FabiolaNeural', label: 'Fabiola (女)', styles: ['general'] },
+            { value: 'it-IT-FiammaNeural', label: 'Fiamma (女)', styles: ['general'] },
+            { value: 'it-IT-GianniNeural', label: 'Gianni (男)', styles: ['general'] },
+            { value: 'it-IT-ImeldaNeural', label: 'Imelda (女)', styles: ['general'] },
+            { value: 'it-IT-IrmaNeural', label: 'Irma (女)', styles: ['general'] },
+            { value: 'it-IT-LisandroNeural', label: 'Lisandro (男)', styles: ['general'] },
+            { value: 'it-IT-PalmiraNeural', label: 'Palmira (女)', styles: ['general'] },
+            { value: 'it-IT-PierinaNeural', label: 'Pierina (女)', styles: ['general'] },
+            { value: 'it-IT-RinaldoNeural', label: 'Rinaldo (男)', styles: ['general'] },
+        ],
+        'pt-BR': [
+            { value: 'pt-BR-FranciscaNeural', label: 'Francisca (女)', styles: ['general'] },
+            { value: 'pt-BR-AntonioNeural', label: 'Antonio (男)', styles: ['general'] },
+            { value: 'pt-BR-BrendaNeural', label: 'Brenda (女)', styles: ['general'] },
+            { value: 'pt-BR-DonatoNeural', label: 'Donato (男)', styles: ['general'] },
+            { value: 'pt-BR-ElzaNeural', label: 'Elza (女)', styles: ['general'] },
+            { value: 'pt-BR-FabioNeural', label: 'Fabio (男)', styles: ['general'] },
+            { value: 'pt-BR-GiovannaNeural', label: 'Giovanna (女)', styles: ['general'] },
+            { value: 'pt-BR-HumbertoNeural', label: 'Humberto (男)', styles: ['general'] },
+            { value: 'pt-BR-JulioNeural', label: 'Julio (男)', styles: ['general'] },
+            { value: 'pt-BR-LeilaNeural', label: 'Leila (女)', styles: ['general'] },
+            { value: 'pt-BR-LeticiaNeural', label: 'Leticia (女)', styles: ['general'] },
+            { value: 'pt-BR-ManuelaNeural', label: 'Manuela (女)', styles: ['general'] },
+            { value: 'pt-BR-NicolauNeural', label: 'Nicolau (男)', styles: ['general'] },
+            { value: 'pt-BR-ValerioNeural', label: 'Valerio (男)', styles: ['general'] },
+            { value: 'pt-BR-YaraNeural', label: 'Yara (女)', styles: ['general'] },
+        ],
+        'pt-PT': [
+            { value: 'pt-PT-RaquelNeural', label: 'Raquel (女)', styles: ['general'] },
+            { value: 'pt-PT-DuarteNeural', label: 'Duarte (男)', styles: ['general'] },
+        ],
+    };
+
+    // Edge TTS 完整语音列表（从 edge-tts 实时拉取，包含所有 Neural 高质量语音）
+    const edgeVoicesByLanguage = {
+        'zh-CN': [
+            { value: 'zh-CN-XiaoxiaoNeural', label: '晓晓 Xiaoxiao (女) - 多风格' },
+            { value: 'zh-CN-XiaoyiNeural',   label: '晓伊 Xiaoyi (女)' },
+            { value: 'zh-CN-YunjianNeural',  label: '云健 Yunjian (男)' },
+            { value: 'zh-CN-YunxiNeural',    label: '云希 Yunxi (男)' },
+            { value: 'zh-CN-YunxiaNeural',   label: '云夏 Yunxia (男)' },
+            { value: 'zh-CN-YunyangNeural',  label: '云扬 Yunyang (男) - 新闻' },
+            { value: 'zh-CN-liaoning-XiaobeiNeural', label: '晓北 Xiaobei (女) - 辽宁方言' },
+            { value: 'zh-CN-shaanxi-XiaoniNeural', label: '晓妮 Xiaoni (女) - 陕西方言' },
+        ],
+        'zh-TW': [
+            { value: 'zh-TW-HsiaoChenNeural', label: '晓晨 HsiaoChen (女) - 台湾腔' },
+            { value: 'zh-TW-YunJheNeural', label: '云哲 YunJhe (男) - 台湾腔' },
+            { value: 'zh-TW-HsiaoYuNeural', label: '晓雨 HsiaoYu (女) - 台湾腔' },
+        ],
+        'zh-HK': [
+            { value: 'zh-HK-HiuGaaiNeural', label: '晓佳 HiuGaai (女) - 粤语' },
+            { value: 'zh-HK-HiuMaanNeural', label: '晓曼 HiuMaan (女) - 粤语' },
+            { value: 'zh-HK-WanLungNeural', label: '云龙 WanLung (男) - 粤语' },
+        ],
+        'en-US': [
+            { value: 'en-US-AvaNeural',                  label: 'Ava (Female)' },
+            { value: 'en-US-AvaMultilingualNeural',      label: 'Ava Multilingual (Female)' },
+            { value: 'en-US-AndrewNeural',               label: 'Andrew (Male)' },
+            { value: 'en-US-AndrewMultilingualNeural',   label: 'Andrew Multilingual (Male)' },
+            { value: 'en-US-EmmaNeural',                 label: 'Emma (Female)' },
+            { value: 'en-US-EmmaMultilingualNeural',     label: 'Emma Multilingual (Female)' },
+            { value: 'en-US-BrianNeural',                label: 'Brian (Male)' },
+            { value: 'en-US-BrianMultilingualNeural',    label: 'Brian Multilingual (Male)' },
+            { value: 'en-US-AnaNeural',                  label: 'Ana (Female) - Child' },
+            { value: 'en-US-AriaNeural',                 label: 'Aria (Female)' },
+            { value: 'en-US-ChristopherNeural',          label: 'Christopher (Male)' },
+            { value: 'en-US-EricNeural',                 label: 'Eric (Male)' },
+            { value: 'en-US-GuyNeural',                  label: 'Guy (Male)' },
+            { value: 'en-US-JennyNeural',                label: 'Jenny (Female)' },
+            { value: 'en-US-MichelleNeural',             label: 'Michelle (Female)' },
+            { value: 'en-US-RogerNeural',                label: 'Roger (Male)' },
+            { value: 'en-US-SteffanNeural',              label: 'Steffan (Male)' },
+        ],
+        'en-GB': [
+            { value: 'en-GB-LibbyNeural',   label: 'Libby (Female)' },
+            { value: 'en-GB-MaisieNeural',  label: 'Maisie (Female) - Child' },
+            { value: 'en-GB-RyanNeural',    label: 'Ryan (Male)' },
+            { value: 'en-GB-SoniaNeural',   label: 'Sonia (Female)' },
+            { value: 'en-GB-ThomasNeural',  label: 'Thomas (Male)' },
+        ],
+        'en-AU': [
+            { value: 'en-AU-NatashaNeural', label: 'Natasha (Female) - Australian' },
+            { value: 'en-AU-WilliamNeural', label: 'William (Male) - Australian' },
+        ],
+        'en-CA': [
+            { value: 'en-CA-ClaraNeural', label: 'Clara (Female) - Canadian' },
+            { value: 'en-CA-LiamNeural', label: 'Liam (Male) - Canadian' },
+        ],
+        'en-IN': [
+            { value: 'en-IN-NeerjaNeural', label: 'Neerja (Female) - Indian' },
+            { value: 'en-IN-PrabhatNeural', label: 'Prabhat (Male) - Indian' },
+        ],
+        'ja-JP': [
+            { value: 'ja-JP-NanamiNeural',  label: '七海 Nanami (女) - 多风格' },
+            { value: 'ja-JP-KeitaNeural',   label: '圭太 Keita (男)' },
+            { value: 'ja-JP-AoiNeural', label: '葵 Aoi (女)' },
+            { value: 'ja-JP-DaichiNeural', label: '大智 Daichi (男)' },
+            { value: 'ja-JP-MayuNeural', label: '真由 Mayu (女)' },
+            { value: 'ja-JP-NaokiNeural', label: '直树 Naoki (男)' },
+            { value: 'ja-JP-ShioriNeural', label: '栞 Shiori (女)' },
+        ],
+        'ko-KR': [
+            { value: 'ko-KR-SunHiNeural', label: '선희 Sun-Hi (女)' },
+            { value: 'ko-KR-InJoonNeural', label: '인준 InJoon (男)' },
+            { value: 'ko-KR-HyunsuNeural', label: '현수 Hyunsu (男)' },
+            { value: 'ko-KR-SoonBokNeural', label: '순복 SoonBok (女)' },
+        ],
+        'es-ES': [
+            { value: 'es-ES-ElviraNeural', label: 'Elvira (Female) - Spain' },
+            { value: 'es-ES-AlvaroNeural', label: 'Alvaro (Male) - Spain' },
+            { value: 'es-ES-AbrilNeural', label: 'Abril (Female) - Spain' },
+            { value: 'es-ES-ArnauNeural', label: 'Arnau (Male) - Spain' },
+            { value: 'es-ES-DarioNeural', label: 'Dario (Male) - Spain' },
+            { value: 'es-ES-EliasNeural', label: 'Elias (Male) - Spain' },
+            { value: 'es-ES-EstrellaNeural', label: 'Estrella (Female) - Spain' },
+            { value: 'es-ES-IreneNeural', label: 'Irene (Female) - Spain' },
+            { value: 'es-ES-LauraNeural', label: 'Laura (Female) - Spain' },
+            { value: 'es-ES-LiaNeural', label: 'Lia (Female) - Spain' },
+        ],
+        'es-MX': [
+            { value: 'es-MX-DaliaNeural', label: 'Dalia (Female) - Mexico' },
+            { value: 'es-MX-JorgeNeural', label: 'Jorge (Male) - Mexico' },
+            { value: 'es-MX-BeatrizNeural', label: 'Beatriz (Female) - Mexico' },
+            { value: 'es-MX-CandelaNeural', label: 'Candela (Female) - Mexico' },
+            { value: 'es-MX-CarlotaNeural', label: 'Carlota (Female) - Mexico' },
+            { value: 'es-MX-CecilioNeural', label: 'Cecilio (Male) - Mexico' },
+            { value: 'es-MX-GerardoNeural', label: 'Gerardo (Male) - Mexico' },
+            { value: 'es-MX-LarissaNeural', label: 'Larissa (Female) - Mexico' },
+            { value: 'es-MX-LibertoNeural', label: 'Liberto (Male) - Mexico' },
+            { value: 'es-MX-LucianoNeural', label: 'Luciano (Male) - Mexico' },
+            { value: 'es-MX-MarinaNeural', label: 'Marina (Female) - Mexico' },
+            { value: 'es-MX-NuriaNeural', label: 'Nuria (Female) - Mexico' },
+            { value: 'es-MX-PelayoNeural', label: 'Pelayo (Male) - Mexico' },
+            { value: 'es-MX-RenataNeural', label: 'Renata (Female) - Mexico' },
+            { value: 'es-MX-YagoNeural', label: 'Yago (Male) - Mexico' },
+        ],
+        'fr-FR': [
+            { value: 'fr-FR-VivienneMultilingualNeural', label: 'Vivienne Multilingual (Female)' },
+            { value: 'fr-FR-RemyMultilingualNeural', label: 'Remy Multilingual (Male)' },
+            { value: 'fr-FR-DeniseNeural', label: 'Denise (Female) - 多风格' },
+            { value: 'fr-FR-EloiseNeural', label: 'Eloise (Female) - Child' },
+            { value: 'fr-FR-HenriNeural', label: 'Henri (Male) - 多风格' },
+        ],
+        'fr-CA': [
+            { value: 'fr-CA-SylvieNeural', label: 'Sylvie (Female) - Canadian' },
+            { value: 'fr-CA-AntoineNeural', label: 'Antoine (Male) - Canadian' },
+            { value: 'fr-CA-JeanNeural', label: 'Jean (Male) - Canadian' },
+        ],
+        'de-DE': [
+            { value: 'de-DE-SeraphinaMultilingualNeural', label: 'Seraphina Multilingual (Female)' },
+            { value: 'de-DE-FlorianMultilingualNeural', label: 'Florian Multilingual (Male)' },
+            { value: 'de-DE-AmalaNeural', label: 'Amala (Female)' },
+            { value: 'de-DE-ConradNeural', label: 'Conrad (Male)' },
+            { value: 'de-DE-KatjaNeural', label: 'Katja (Female)' },
+            { value: 'de-DE-KillianNeural', label: 'Killian (Male)' },
+            { value: 'de-DE-BerndNeural', label: 'Bernd (Male)' },
+            { value: 'de-DE-ChristophNeural', label: 'Christoph (Male)' },
+            { value: 'de-DE-ElkeNeural', label: 'Elke (Female)' },
+            { value: 'de-DE-GiselaNeural', label: 'Gisela (Female) - Child' },
+            { value: 'de-DE-KasperNeural', label: 'Kasper (Male)' },
+            { value: 'de-DE-KlarissaNeural', label: 'Klarissa (Female)' },
+            { value: 'de-DE-KlausNeural', label: 'Klaus (Male)' },
+            { value: 'de-DE-LouisaNeural', label: 'Louisa (Female)' },
+            { value: 'de-DE-MajaNeural', label: 'Maja (Female)' },
+            { value: 'de-DE-RalfNeural', label: 'Ralf (Male)' },
+            { value: 'de-DE-TanjaNeural', label: 'Tanja (Female)' },
+        ],
+        'it-IT': [
+            { value: 'it-IT-GiuseppeMultilingualNeural', label: 'Giuseppe Multilingual (Male)' },
+            { value: 'it-IT-DiegoNeural', label: 'Diego (Male)' },
+            { value: 'it-IT-ElsaNeural', label: 'Elsa (Female)' },
+            { value: 'it-IT-IsabellaNeural', label: 'Isabella (Female)' },
+            { value: 'it-IT-BenignoNeural', label: 'Benigno (Male)' },
+            { value: 'it-IT-CalimeroNeural', label: 'Calimero (Male)' },
+            { value: 'it-IT-CataldoNeural', label: 'Cataldo (Male)' },
+            { value: 'it-IT-FabiolaNeural', label: 'Fabiola (Female)' },
+            { value: 'it-IT-FiammaNeural', label: 'Fiamma (Female)' },
+            { value: 'it-IT-GianniNeural', label: 'Gianni (Male)' },
+            { value: 'it-IT-ImeldaNeural', label: 'Imelda (Female)' },
+            { value: 'it-IT-IrmaNeural', label: 'Irma (Female)' },
+            { value: 'it-IT-LisandroNeural', label: 'Lisandro (Male)' },
+            { value: 'it-IT-PalmiraNeural', label: 'Palmira (Female)' },
+            { value: 'it-IT-PierinaNeural', label: 'Pierina (Female)' },
+            { value: 'it-IT-RinaldoNeural', label: 'Rinaldo (Male)' },
+        ],
+        'pt-BR': [
+            { value: 'pt-BR-ThalitaMultilingualNeural', label: 'Thalita Multilingual (Female)' },
+            { value: 'pt-BR-AntonioNeural', label: 'Antonio (Male)' },
+            { value: 'pt-BR-FranciscaNeural', label: 'Francisca (Female)' },
+            { value: 'pt-BR-BrendaNeural', label: 'Brenda (Female)' },
+            { value: 'pt-BR-DonatoNeural', label: 'Donato (Male)' },
+            { value: 'pt-BR-ElzaNeural', label: 'Elza (Female)' },
+            { value: 'pt-BR-FabioNeural', label: 'Fabio (Male)' },
+            { value: 'pt-BR-GiovannaNeural', label: 'Giovanna (Female)' },
+            { value: 'pt-BR-HumbertoNeural', label: 'Humberto (Male)' },
+            { value: 'pt-BR-JulioNeural', label: 'Julio (Male)' },
+            { value: 'pt-BR-LeilaNeural', label: 'Leila (Female)' },
+            { value: 'pt-BR-LeticiaNeural', label: 'Leticia (Female)' },
+            { value: 'pt-BR-ManuelaNeural', label: 'Manuela (Female)' },
+            { value: 'pt-BR-NicolauNeural', label: 'Nicolau (Male)' },
+            { value: 'pt-BR-ValerioNeural', label: 'Valerio (Male)' },
+            { value: 'pt-BR-YaraNeural', label: 'Yara (Female)' },
+        ],
+        'pt-PT': [
+            { value: 'pt-PT-RaquelNeural', label: 'Raquel (Female) - Portugal' },
+            { value: 'pt-PT-DuarteNeural', label: 'Duarte (Male) - Portugal' },
+        ],
+    };
+
+    // 当前使用的语音列表（根据引擎动态切换）
+    let currentVoicesByLanguage = azureVoicesByLanguage;
+    
+    // 检测当前应该使用哪个 TTS 引擎
+    // 根据 Azure API Key 的有效性决定：
+    // - API Key 有效 → 显示 Azure 语音列表（完整高级语音）
+    // - API Key 无效/不存在 → 显示 Edge 语音列表（基础语音）
+    async function detectTTSEngine() {
+        try {
+            const settings = await invoke('get_settings_command');
+            const apiKey = settings.api_key || '';
+            const region = settings.region || 'eastus';
+            
+            // 验证 Azure API Key 是否有效
+            let isAzureValid = false;
+            if (apiKey) {
+                try {
+                    isAzureValid = await invoke('validate_azure_api_key', { 
+                        apiKey: apiKey, 
+                        region: region 
+                    });
+                } catch (e) {
+                    console.log('API Key validation error:', e);
+                    isAzureValid = false;
+                }
+            }
+            
+            // 根据 API Key 有效性切换语音列表
+            if (isAzureValid) {
+                console.log('Azure API Key is valid, using Azure voice list');
+                currentVoicesByLanguage = azureVoicesByLanguage;
+                return 'azure';
+            } else {
+                console.log('Azure API Key is invalid or not set, using Edge voice list');
+                currentVoicesByLanguage = edgeVoicesByLanguage;
+                return 'edge';
+            }
+        } catch (e) {
+            console.log('Failed to detect TTS engine, defaulting to Edge');
+            currentVoicesByLanguage = edgeVoicesByLanguage;
+            return 'edge';
+        }
+    }
+    
+    // 更新语音列表显示
+    function updateVoiceList(lang) {
+        const voices = currentVoicesByLanguage[lang] || [];
+        voiceSelect.innerHTML = voices.map(v => 
+            `<option value="${v.value}">${v.label}</option>`
+        ).join('');
+    }
+
+    const textarea = document.getElementById('tts-input');
+    const charCount = document.getElementById('char-count');
+    const playBtn = document.getElementById('btn-play');
+    const velocitySlider = document.getElementById('velocity-slider');
+    const velocityValue = document.getElementById('velocity-value');
+    const languageSelect = document.getElementById('language-select');
+    const voiceSelect = document.getElementById('voice-select');
+    const saveBtn = document.getElementById('btn-save');
+    const savePathDisplay = document.getElementById('save-path-display');
+
+    // 从localStorage读取保存路径
+    let savePath = localStorage.getItem('greader_save_path') || '';
+
+    // 更新保存路径显示
+    function updateSavePathDisplay() {
+        if (savePath) {
+            savePathDisplay.textContent = savePath;
+            savePathDisplay.classList.remove('text-gray-500');
+            savePathDisplay.classList.add('text-neonGreen');
+        } else {
+            savePathDisplay.textContent = 'Not set';
+            savePathDisplay.classList.remove('text-neonGreen');
+            savePathDisplay.classList.add('text-gray-500');
+        }
+    }
+
+    // 页面加载时更新显示
+    updateSavePathDisplay();
+
+    // 页面加载时检测 TTS 引擎并初始化语音列表
+    (async function init() {
+        const engine = await detectTTSEngine();
+        console.log(`TTS Engine: ${engine}`);
+        updateVoiceList(languageSelect.value);
+    })();
+
+    // Update voices when language changes
+    languageSelect.addEventListener('change', (e) => {
+        updateVoiceList(e.target.value);
+    });
+
+    // Update character count
+    textarea.addEventListener('input', (e) => {
+      charCount.textContent = `${e.target.value.length} chars`;
+    });
+
+    // Update velocity display
+    velocitySlider.addEventListener('input', (e) => {
+      velocityValue.textContent = `${parseFloat(e.target.value).toFixed(1)}x`;
+    });
+
+    // Save To button - 设置保存路径
+    saveBtn.addEventListener('click', async () => {
+        try {
+            const { open } = window.__TAURI__.dialog;
+            const result = await open({
+                title: 'Select Save Folder',
+                directory: true
+            });
+            if (result) {
+                savePath = result;
+                localStorage.setItem('greader_save_path', savePath);
+                updateSavePathDisplay();
+                console.log('Save path set to:', savePath);
+                saveBtn.querySelector('span').textContent = 'SAVED';
+                setTimeout(() => {
+                    saveBtn.querySelector('span').textContent = 'Save To';
+                }, 1500);
+            }
+        } catch (e) {
+            console.error('Save dialog error:', e);
+        }
+    });
+
+    // Execute button - generate speech
+    playBtn.addEventListener('click', async () => {
+      // 检查是否设置了保存路径
+      if (!savePath) {
+        playBtn.querySelector('span').textContent = 'SET PATH FIRST';
+        playBtn.classList.add('animate-pulse');
+        setTimeout(() => {
+            playBtn.querySelector('span').textContent = 'Execute';
+            playBtn.classList.remove('animate-pulse');
+        }, 2000);
+        return;
+      }
+
+      if(textarea.value.trim() === "") {
+        textarea.classList.add('border-red-500/50');
+        setTimeout(() => textarea.classList.remove('border-red-500/50'), 1000);
+        return;
+      }
+      
+      const span = playBtn.querySelector('span');
+      const originalText = span.textContent;
+      span.textContent = 'SYNTHESIZING...';
+      playBtn.classList.add('animate-pulse');
+      
+      try {
+        const text = textarea.value;
+        const voice = voiceSelect.value;
+        const velocity = parseFloat(velocitySlider.value);
+        
+         const result = await invoke('generate_speech', {
+            text: text,
+            filename: `output_${Date.now()}`,
+            voice: voice,
+            velocity: velocity,
+            savePath: savePath
+        });
+        
+        if (result.success) {
+            span.textContent = 'SUCCESS';
+        } else {
+            span.textContent = 'FAILED';
+            console.error('TTS Error:', result.message);
+            // 显示错误提示
+            const errorMsg = result.message || 'Unknown error';
+            if (errorMsg.includes('Azure') && errorMsg.includes('Edge')) {
+                alert('TTS Failed: Both Azure and Edge TTS failed. Please check your settings.');
+            } else if (errorMsg.includes('file') || errorMsg.includes('path')) {
+                alert('TTS Failed: ' + errorMsg);
+            }
+        }
+      } catch (e) {
+        span.textContent = 'ERROR';
+        console.error('Invoke error:', e);
+        alert('System Error: ' + e);
+      }
+      
+      setTimeout(() => {
+        span.textContent = originalText;
+        playBtn.classList.remove('animate-pulse');
+      }, 2000);
+    });
+
+    // 拖拽 TXT 文件到 Input Buffer
+    // 阻止默认拖拽行为（在整个文档上）
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        document.body.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        }, false);
+    });
+    
+    // 拖拽进入 textarea 时的视觉反馈
+    textarea.addEventListener('dragenter', (e) => {
+        e.preventDefault();
+        textarea.classList.add('border-neonGreen');
+        textarea.style.borderColor = '#00FF00';
+    });
+    
+    textarea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        textarea.style.borderColor = '#00FF00';
+    });
+    
+    textarea.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        textarea.style.borderColor = '';
+    });
+    
+    // 处理文件拖放
+    textarea.addEventListener('drop', async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        textarea.style.borderColor = '';
+        
+        console.log('Drop event triggered');
+        
+        const files = e.dataTransfer.files;
+        if (files.length === 0) {
+            console.log('No files dropped');
+            return;
+        }
+        
+        const file = files[0];
+        console.log('Dropped file:', file.name);
+        
+        // 检查是否为 TXT 文件
+        if (!file.name.toLowerCase().endsWith('.txt')) {
+            console.log('Only .txt files are supported');
+            alert('Please drop a .txt file');
+            return;
+        }
+        
+        try {
+            const text = await file.text();
+            textarea.value = text;
+            // 触发 input 事件以更新字符计数
+            textarea.dispatchEvent(new Event('input'));
+            console.log('File loaded successfully:', file.name);
+        } catch (err) {
+            console.error('Failed to read file:', err);
+            alert('Failed to read file: ' + err.message);
+        }
+    });
+
+    // 当窗口重新获得焦点时，重新检测 TTS 引擎（用户可能在设置中更改了 API Key）
+    window.addEventListener('focus', async () => {
+        const previousEngine = currentVoicesByLanguage === azureVoicesByLanguage ? 'azure' : 'edge';
+        const newEngine = await detectTTSEngine();
+        
+        // 如果引擎发生变化，更新语音列表
+        if (previousEngine !== newEngine) {
+            console.log(`TTS Engine changed: ${previousEngine} -> ${newEngine}`);
+            const currentLang = languageSelect.value;
+            updateVoiceList(currentLang);
+            
+            // 显示提示
+            const originalText = playBtn.querySelector('span').textContent;
+            playBtn.querySelector('span').textContent = newEngine === 'azure' ? 'AZURE MODE' : 'EDGE MODE';
+            setTimeout(() => {
+                playBtn.querySelector('span').textContent = originalText;
+            }, 1500);
+        }
+    });
+
+    // Window controls
+    (function initWindowControls() {
+        try {
+            const { getCurrentWindow } = window.__TAURI__.window;
+            
+            document.getElementById('btn-minimize').addEventListener('click', async () => {
+                await getCurrentWindow().minimize();
+            });
+            
+            document.getElementById('btn-maximize').addEventListener('click', async () => {
+                const win = getCurrentWindow();
+                if (await win.isMaximized()) {
+                    await win.unmaximize();
+                } else {
+                    await win.maximize();
+                }
+            });
+            
+            document.getElementById('btn-close').addEventListener('click', async () => {
+                await getCurrentWindow().close();
+            });
+        } catch(e) {
+            console.error('Window controls error:', e);
+        }
+    })();
+
+    // Settings button - 直接调用后端命令打开设置窗口，无需任何 JS 窗口 API
+    document.getElementById('btn-settings').onclick = async function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        try {
+            await invoke('open_settings_window');
+        } catch (err) {
+            console.error('Failed to open settings:', err);
+        }
+    };
+</script>
+</body></html>
