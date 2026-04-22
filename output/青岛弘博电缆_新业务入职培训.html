@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>青岛弘博电缆 - 新业务入职培训</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Playfair+Display:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0A1628;
+            --primary-light: #1A2D4A;
+            --accent: #E8A838;
+            --accent-glow: #F4C76B;
+            --text-light: #F8F9FA;
+            --text-muted: #8892A0;
+            --surface: #0F1923;
+            --gradient-start: #0A1628;
+            --gradient-end: #1A3A5C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--primary);
+            color: var(--text-light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Slide System */
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 80px;
+            position: relative;
+            scroll-snap-align: start;
+            overflow: hidden;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 20% 80%, rgba(232, 168, 56, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(26, 61, 90, 0.3) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 30px;
+            right: 40px;
+            font-family: 'Space Mono', monospace;
+            font-size: 14px;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+        }
+
+        /* Typography */
+        .slide-title {
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: clamp(3.5rem, 7vw, 5.5rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--text-light) 0%, var(--accent-glow) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.1rem;
+            letter-spacing: 4px;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Cover Slide */
+        .cover {
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            text-align: center;
+        }
+
+        .cover .logo-text {
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 8px;
+            color: var(--accent);
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+        }
+
+        .cover .main-title {
+            font-size: clamp(4rem, 10vw, 7rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, var(--accent-glow) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s ease-in-out infinite;
+            background-size: 200% 100%;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .cover .subtitle {
+            font-size: 2rem;
+            color: var(--text-muted);
+            font-weight: 300;
+            margin-bottom: 3rem;
+        }
+
+        .cover .badge {
+            display: inline-block;
+            padding: 14px 36px;
+            background: rgba(232, 168, 56, 0.15);
+            border: 1px solid var(--accent);
+            border-radius: 50px;
+            color: var(--accent);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(232, 168, 56, 0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .card-desc {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* Stats */
+        .stats-row {
+            display: flex;
+            gap: 80px;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--accent);
+            font-family: 'Space Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 0.5rem;
+        }
+
+        /* Two Column Layout */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            width: 100%;
+            max-width: 1200px;
+            align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .two-col {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        /* Comparison Cards */
+        .compare-card {
+            background: rgba(255,255,255,0.02);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .compare-card.auto {
+            border-color: rgba(56, 189, 248, 0.3);
+            background: linear-gradient(145deg, rgba(56, 189, 248, 0.05) 0%, transparent 100%);
+        }
+
+        .compare-card.home {
+            border-color: rgba(232, 168, 56, 0.3);
+            background: linear-gradient(145deg, rgba(232, 168, 56, 0.05) 0%, transparent 100%);
+        }
+
+        .compare-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .compare-title .tag {
+            font-size: 0.9rem;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .tag-auto { background: rgba(56, 189, 248, 0.2); color: #38BDF8; }
+        .tag-home { background: rgba(232, 168, 56, 0.2); color: #E8A838; }
+
+        .compare-list {
+            list-style: none;
+        }
+
+        .compare-list li {
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .compare-list li:last-child {
+            border-bottom: none;
+        }
+
+        .compare-label {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+        }
+
+        .compare-value {
+            font-weight: 600;
+            font-family: 'Space Mono', monospace;
+            font-size: 1.1rem;
+        }
+
+        /* Timeline */
+        .timeline {
+            width: 100%;
+            max-width: 1000px;
+            margin-top: 2rem;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 30px;
+            padding: 30px 0;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 24px;
+            top: 70px;
+            bottom: -30px;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--accent), transparent);
+        }
+
+        .timeline-item:last-child::before {
+            display: none;
+        }
+
+        .timeline-num {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-glow));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .timeline-content {
+            flex: 1;
+            padding-top: 5px;
+        }
+
+        .timeline-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-desc {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Process Flow */
+        .process-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+            max-width: 1300px;
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        .process-flow::before {
+            content: '';
+            position: absolute;
+            top: 35px;
+            left: 70px;
+            right: 70px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-glow));
+            z-index: 0;
+        }
+
+        .process-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 160px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .process-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .process-name {
+            font-weight: 700;
+            font-size: 1.15rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .process-sub {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Alert Box */
+        .alert {
+            padding: 28px 36px;
+            border-radius: 12px;
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .alert-warning {
+            background: rgba(232, 168, 56, 0.1);
+            border: 1px solid var(--accent);
+            border-left: 4px solid var(--accent);
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #EF4444;
+            border-left: 4px solid #EF4444;
+        }
+
+        .alert-title {
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-text {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            max-width: 1100px;
+            border-collapse: collapse;
+            margin-top: 2rem;
+        }
+
+        .data-table th {
+            background: rgba(232, 168, 56, 0.1);
+            padding: 18px 24px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .data-table td {
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 1.1rem;
+        }
+
+        .data-table tr:hover td {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .data-table .mono {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+        }
+
+        /* Growth Path */
+        .growth-path {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+            max-width: 1100px;
+            margin-top: 2rem;
+        }
+
+        .growth-phase {
+            flex: 1;
+            background: rgba(255,255,255,0.02);
+            border-radius: 20px;
+            padding: 35px;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+        }
+
+        .growth-phase::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .growth-phase:nth-child(1)::before { background: #38BDF8; }
+        .growth-phase:nth-child(2)::before { background: var(--accent); }
+        .growth-phase:nth-child(3)::before { background: linear-gradient(90deg, #38BDF8, var(--accent)); }
+
+        .growth-time {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            color: var(--accent);
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .growth-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .growth-skills {
+            list-style: none;
+        }
+
+        .growth-skills li {
+            padding: 10px 0;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .growth-skills li::before {
+            content: '→';
+            color: var(--accent);
+        }
+
+        /* Quote */
+        .quote-box {
+            max-width: 900px;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .quote-text {
+            font-size: 2.2rem;
+            font-weight: 300;
+            line-height: 1.6;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .quote-author {
+            color: var(--accent);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+        }
+
+        /* Contact Card */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            width: 100%;
+            max-width: 1000px;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            text-align: center;
+            padding: 35px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .contact-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-label {
+            font-size: 1rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-value {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide.visible .fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in:nth-child(2) { transition-delay: 0.1s; }
+        .fade-in:nth-child(3) { transition-delay: 0.2s; }
+        .fade-in:nth-child(4) { transition-delay: 0.3s; }
+        .fade-in:nth-child(5) { transition-delay: 0.4s; }
+        .fade-in:nth-child(6) { transition-delay: 0.5s; }
+
+        /* Navigation */
+        .nav-dots {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-dot:hover,
+        .nav-dot.active {
+            background: var(--accent);
+            transform: scale(1.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 40px 24px;
+            }
+
+            .nav-dots {
+                display: none;
+            }
+
+            .process-flow {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 30px;
+            }
+
+            .process-flow::before {
+                display: none;
+            }
+
+            .growth-path {
+                flex-direction: column;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Dots -->
+    <div class="nav-dots">
+        <div class="nav-dot active" data-slide="0"></div>
+        <div class="nav-dot" data-slide="1"></div>
+        <div class="nav-dot" data-slide="2"></div>
+        <div class="nav-dot" data-slide="3"></div>
+        <div class="nav-dot" data-slide="4"></div>
+        <div class="nav-dot" data-slide="5"></div>
+        <div class="nav-dot" data-slide="6"></div>
+        <div class="nav-dot" data-slide="7"></div>
+        <div class="nav-dot" data-slide="8"></div>
+        <div class="nav-dot" data-slide="9"></div>
+        <div class="nav-dot" data-slide="10"></div>
+        <div class="nav-dot" data-slide="11"></div>
+    </div>
+
+    <!-- Slide 1: Cover -->
+    <section class="slide cover" id="slide-0">
+        <div class="logo-text">青岛弘博电缆有限公司</div>
+        <h1 class="main-title">新业务入职培训</h1>
+        <p class="subtitle">汽车线束 · 家电线束 · 技术型销售培养</p>
+        <div class="badge">技术型销售成长计划 2026</div>
+        <div class="slide-number">01 / 12</div>
+    </section>
+
+    <!-- Slide 2: Company Overview -->
+    <section class="slide" id="slide-1">
+        <p class="section-label fade-in">01 · 公司认知</p>
+        <h2 class="slide-title fade-in">公司简介</h2>
+
+        <div class="cards-grid">
+            <div class="card fade-in">
+                <div class="card-icon">🏭</div>
+                <h3 class="card-title">青岛弘博电缆有限公司</h3>
+                <p class="card-desc">专注汽车线束与家电线束研发制造，拥有完善的质量管理体系和先进的生产设备。</p>
+            </div>
+            <div class="card fade-in">
+                <div class="card-icon">🎯</div>
+                <h3 class="card-title">质量第一 · 客户至上</h3>
+                <p class="card-desc">秉承诚信经营原则，通过IATF 16949、ISO 9001等国际认证，为客户提供优质产品。</p>
+            </div>
+            <div class="card fade-in">
+                <div class="card-icon">🤝</div>
+                <h3 class="card-title">当前主要客户</h3>
+                <p class="card-desc">海信（存量）、中国重汽（新增）、美的（暂停）</p>
+            </div>
+        </div>
+
+        <div class="stats-row fade-in">
+            <div class="stat">
+                <div class="stat-value">IATF 16949</div>
+                <div class="stat-label">汽车质量体系</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">ISO 9001</div>
+                <div class="stat-label">质量管理体系</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">UL</div>
+                <div class="stat-label">产品安全认证</div>
+            </div>
+        </div>
+
+        <div class="slide-number">02 / 12</div>
+    </section>
+
+    <!-- Slide 3: Product Comparison -->
+    <section class="slide" id="slide-2">
+        <p class="section-label fade-in">01 · 公司认知</p>
+        <h2 class="slide-title fade-in">产品家族</h2>
+
+        <div class="two-col">
+            <div class="compare-card auto fade-in">
+                <h3 class="compare-title">
+                    汽车线束
+                    <span class="tag tag-auto">Automotive</span>
+                </h3>
+                <ul class="compare-list">
+                    <li>
+                        <span class="compare-label">认证标准</span>
+                        <span class="compare-value">IATF 16949 · UL · CCC</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">工作温度</span>
+                        <span class="compare-value">-40°C ~ +125°C</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">质量要求</span>
+                        <span class="compare-value">< 10 PPM</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">测试要求</span>
+                        <span class="compare-value">100% 全检</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">防水等级</span>
+                        <span class="compare-value">IP67 / IP69K</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">应用场景</span>
+                        <span class="compare-value">发动机 · 底盘 · 车身</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="compare-card home fade-in">
+                <h3 class="compare-title">
+                    家电线束
+                    <span class="tag tag-home">Appliance</span>
+                </h3>
+                <ul class="compare-list">
+                    <li>
+                        <span class="compare-label">认证标准</span>
+                        <span class="compare-value">ISO 9001 · UL · CE</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">工作温度</span>
+                        <span class="compare-value">-10°C ~ +70°C</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">质量要求</span>
+                        <span class="compare-value">< 0.3%</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">测试要求</span>
+                        <span class="compare-value">抽检为主</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">防水等级</span>
+                        <span class="compare-value">IP20 ~ IP54</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">应用场景</span>
+                        <span class="compare-value">空调 · 冰箱 · 洗衣机</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="alert alert-warning fade-in">
+            <div class="alert-title">📌 业务要点</div>
+            <div class="alert-text">汽车线束要求更严格，但单价和利润更高；家电线束订单批量大，但竞争激烈</div>
+        </div>
+
+        <div class="slide-number">03 / 12</div>
+    </section>
+
+    <!-- Slide 4: Job Responsibilities -->
+    <section class="slide" id="slide-3">
+        <p class="section-label fade-in">02 · 岗位职责</p>
+        <h2 class="slide-title fade-in">价值链条</h2>
+        <p class="fade-in" style="color: var(--text-muted); max-width: 600px; text-align: center;">从接单到回款的全流程管理</p>
+
+        <div class="process-flow fade-in">
+            <div class="process-step">
+                <div class="process-icon">📋</div>
+                <div class="process-name">客户询价</div>
+                <div class="process-sub">需求沟通</div>
+            </div>
+            <div class="process-step">
+                <div class="process-icon">💰</div>
+                <div class="process-name">报价确认</div>
+                <div class="process-sub">技术+成本</div>
+            </div>
+            <div class="process-step">
+                <div class="process-icon">✍️</div>
+                <div class="process-name">订单确认</div>
+                <div class="process-sub">合同签订</div>
+            </div>
+            <div class="process-step">
+                <div class="process-icon">🏭</div>
+                <div class="process-name">生产跟进</div>
+                <div class="process-sub">交期+品质</div>
+            </div>
+            <div class="process-step">
+                <div class="process-icon">📦</div>
+                <div class="process-name">出货验收</div>
+                <div class="process-sub">物流跟踪</div>
+            </div>
+            <div class="process-step">
+                <div class="process-icon">✅</div>
+                <div class="process-name">回款完成</div>
+                <div class="process-sub">对账开票</div>
+            </div>
+        </div>
+
+        <div class="alert alert-warning fade-in">
+            <div class="alert-title">💡 业务核心价值</div>
+            <div class="alert-text">你是客户与公司的唯一窗口。主动协调资源、推动问题解决、传递准确信息——你的专业度直接影响客户满意度和公司利润。</div>
+        </div>
+
+        <div class="slide-number">04 / 12</div>
+    </section>
+
+    <!-- Slide 5: Internal Communication -->
+    <section class="slide" id="slide-4">
+        <p class="section-label fade-in">03 · 对内联系</p>
+        <h2 class="slide-title fade-in">内部协作网络</h2>
+
+        <div class="cards-grid">
+            <div class="card fade-in">
+                <div class="card-icon">🏭</div>
+                <h3 class="card-title">生产部</h3>
+                <p class="card-desc">产能评估、交期确认、生产异常处理</p>
+            </div>
+            <div class="card fade-in">
+                <div class="card-icon">🔧</div>
+                <h3 class="card-title">技术部</h3>
+                <p class="card-desc">设计评审、工艺确认、技术变更</p>
+            </div>
+            <div class="card fade-in">
+                <div class="card-icon">📊</div>
+                <h3 class="card-title">PMC</h3>
+                <p class="card-desc">排产计划、物料跟踪、交期预测</p>
+            </div>
+            <div class="card fade-in">
+                <div class="card-icon">✅</div>
+                <h3 class="card-title">品质部</h3>
+                <p class="card-desc">来料检验、过程质量、客诉处理</p>
+            </div>
+            <div class="card fade-in">
+                <div class="card-icon">🛒</div>
+                <h3 class="card-title">采购部</h3>
+                <p class="card-desc">原材料价格、供应商交期</p>
+            </div>
+            <div class="card fade-in">
+                <div class="card-icon">💳</div>
+                <h3 class="card-title">财务部</h3>
+                <p class="card-desc">应收账款、发票开具、账期管理</p>
+            </div>
+        </div>
+
+        <div class="slide-number">05 / 12</div>
+    </section>
+
+    <!-- Slide 6: Communication Rules -->
+    <section class="slide" id="slide-5">
+        <p class="section-label fade-in">03 · 对内联系</p>
+        <h2 class="slide-title fade-in">沟通规范</h2>
+
+        <div class="two-col" style="margin-top: 2rem;">
+            <div class="compare-card fade-in" style="border-color: rgba(56, 189, 248, 0.3);">
+                <h3 class="compare-title" style="color: #38BDF8;">✅ 日常沟通</h3>
+                <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 1.5rem;">私下沟通 或 群里简单询问</p>
+                <ul class="compare-list">
+                    <li><span class="compare-label">日常进度了解</span></li>
+                    <li><span class="compare-label">简单问题咨询</span></li>
+                    <li><span class="compare-label">非紧急情况反馈</span></li>
+                </ul>
+            </div>
+
+            <div class="compare-card fade-in" style="border-color: rgba(239, 68, 68, 0.3);">
+                <h3 class="compare-title" style="color: #EF4444;">⚠️ 必须群里公开</h3>
+                <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 1.5rem;">公司运营重要情况/数据/时效</p>
+                <ul class="compare-list">
+                    <li><span class="compare-label">订单交期变更</span></li>
+                    <li><span class="compare-label">质量异常通报</span></li>
+                    <li><span class="compare-label">客户重要诉求</span></li>
+                    <li><span class="compare-label">财务数据同步</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="alert alert-danger fade-in" style="margin-top: 2rem;">
+            <div class="alert-title">🔴 重要原则</div>
+            <div class="alert-text">涉及公司运营的重要情况必须群里公开沟通。这是官方沟通规范，也是保护你自己的方式。</div>
+        </div>
+
+        <div class="slide-number">06 / 12</div>
+    </section>
+
+    <!-- Slide 7: Production Process -->
+    <section class="slide" id="slide-6">
+        <p class="section-label fade-in">05 · 生产工艺</p>
+        <h2 class="slide-title fade-in">六大核心工序</h2>
+
+        <div class="timeline fade-in">
+            <div class="timeline-item">
+                <div class="timeline-num">01</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">来料检验 IQC</div>
+                    <div class="timeline-desc">原材料入库前的质量检验，确保来料符合标准</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-num">02</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">裁线 Wire Cutting</div>
+                    <div class="timeline-desc">按照图纸要求定长裁切、剥除外皮，精度要求±1mm</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-num">03</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">压接 Crimping</div>
+                    <div class="timeline-desc">端子压接配合拉力检测，汽车线100%全检，家电线抽检</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-num">04</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">装配 Assembly</div>
+                    <div class="timeline-desc">预装配+总装配，穿套管、缠胶带、插连接器</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-num">05</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">测试 Testing</div>
+                    <div class="timeline-desc">通断测试、耐压测试、防水测试（IP67/IP69K）</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-num">06</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">终检 Final Inspection</div>
+                    <div class="timeline-desc">外观检查、功能复测、确认合格后转入包装</div>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-num">07</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">包装 Packaging</div>
+                    <div class="timeline-desc">防护包装、标签粘贴、成品入库</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide-number">07 / 12</div>
+    </section>
+
+    <!-- Slide 8: Quality Standards -->
+    <section class="slide" id="slide-7">
+        <p class="section-label fade-in">06 · 关键盯控点</p>
+        <h2 class="slide-title fade-in">质量红线</h2>
+
+        <div class="two-col">
+            <div class="compare-card auto fade-in">
+                <h3 class="compare-title">
+                    汽车线束
+                    <span class="tag tag-auto">PPM级</span>
+                </h3>
+                <ul class="compare-list">
+                    <li>
+                        <span class="compare-label">不良率</span>
+                        <span class="compare-value" style="color: #38BDF8;">< 10 PPM</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">拉力测试</span>
+                        <span class="compare-value">100% 全检</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">耐压测试</span>
+                        <span class="compare-value">AC 1500V / 1min</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">振动测试</span>
+                        <span class="compare-value">ISO 16750</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="compare-card home fade-in">
+                <h3 class="compare-title">
+                    家电线束
+                    <span class="tag tag-home">千分之三</span>
+                </h3>
+                <ul class="compare-list">
+                    <li>
+                        <span class="compare-label">不良率</span>
+                        <span class="compare-value" style="color: var(--accent);">< 0.3%</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">拉力测试</span>
+                        <span class="compare-value">抽检为主</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">耐压测试</span>
+                        <span class="compare-value">抽检</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">振动测试</span>
+                        <span class="compare-value">一般无需</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="alert alert-danger fade-in">
+            <div class="alert-title">🚫 绝对不能触碰的质量红线</div>
+            <div class="alert-text">
+                <strong>虚压/假压</strong> — 端子与导线未真正连接，会导致断路甚至火灾<br>
+                <strong>线序错误</strong> — 多芯线束线序接错，导致设备烧毁<br>
+                <strong>防水失效</strong> — 密封不严导致水进入，轻则短路重则安全事故
+            </div>
+        </div>
+
+        <div class="slide-number">08 / 12</div>
+    </section>
+
+    <!-- Slide 9: Technical Specs -->
+    <section class="slide" id="slide-8">
+        <p class="section-label fade-in">07 · 技术指引</p>
+        <h2 class="slide-title fade-in">导线规格速查</h2>
+
+        <table class="data-table fade-in">
+            <thead>
+                <tr>
+                    <th>AWG规格</th>
+                    <th>截面积 (mm²)</th>
+                    <th>额定电流 (A)</th>
+                    <th>常见用途</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="mono">22 AWG</td>
+                    <td class="mono">0.324</td>
+                    <td class="mono">2</td>
+                    <td>信号线、小电流控制</td>
+                </tr>
+                <tr>
+                    <td class="mono">20 AWG</td>
+                    <td class="mono">0.519</td>
+                    <td class="mono">3</td>
+                    <td>信号线、控制线路</td>
+                </tr>
+                <tr>
+                    <td class="mono">18 AWG</td>
+                    <td class="mono">0.823</td>
+                    <td class="mono">5</td>
+                    <td>尾灯、开关、小功率</td>
+                </tr>
+                <tr>
+                    <td class="mono">16 AWG</td>
+                    <td class="mono">1.31</td>
+                    <td class="mono">7</td>
+                    <td>转向灯、喇叭</td>
+                </tr>
+                <tr>
+                    <td class="mono">14 AWG</td>
+                    <td class="mono">2.08</td>
+                    <td class="mono">10</td>
+                    <td>大灯、暖风</td>
+                </tr>
+                <tr>
+                    <td class="mono">12 AWG</td>
+                    <td class="mono">3.31</td>
+                    <td class="mono">15</td>
+                    <td>发动机相关</td>
+                </tr>
+                <tr>
+                    <td class="mono">10 AWG</td>
+                    <td class="mono">5.26</td>
+                    <td class="mono">20</td>
+                    <td>电源线、主线路</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="alert alert-warning fade-in" style="margin-top: 1.5rem;">
+            <div class="alert-title">💡 记忆口诀</div>
+            <div class="alert-text">AWG数值越大，导线越细，载流越小。<br>汽车线束常用 18~10AWG，0.5²够一般信号，1.5²够一般电源，2.5²够大电流</div>
+        </div>
+
+        <div class="slide-number">09 / 12</div>
+    </section>
+
+    <!-- Slide 10: Growth Path -->
+    <section class="slide" id="slide-9">
+        <p class="section-label fade-in">08 · 成长路径</p>
+        <h2 class="slide-title fade-in">技术型销售成长路径</h2>
+
+        <div class="growth-path">
+            <div class="growth-phase fade-in">
+                <div class="growth-time">0-6 个月</div>
+                <div class="growth-title">初级阶段</div>
+                <ul class="growth-skills">
+                    <li>掌握产品基础参数</li>
+                    <li>熟悉内部流程</li>
+                    <li>了解客户需求</li>
+                    <li>独立跟进中小客户</li>
+                </ul>
+            </div>
+
+            <div class="growth-phase fade-in">
+                <div class="growth-time">6-18 个月</div>
+                <div class="growth-title">中级阶段</div>
+                <ul class="growth-skills">
+                    <li>技术方案报价能力</li>
+                    <li>大客户维护</li>
+                    <li>问题处理能力</li>
+                    <li>竞争应对</li>
+                </ul>
+            </div>
+
+            <div class="growth-phase fade-in">
+                <div class="growth-time">18-36 个月</div>
+                <div class="growth-title">高级阶段</div>
+                <ul class="growth-skills">
+                    <li>技术型销售转型</li>
+                    <li>大项目操盘</li>
+                    <li>客户战略规划</li>
+                    <li>团队协作能力</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="quote-box fade-in">
+            <p class="quote-text">技术型销售是最稀缺的人才<br>——既懂技术能解决问题，又懂商业能赢得客户</p>
+            <p class="quote-author">— 成长寄语</p>
+        </div>
+
+        <div class="slide-number">10 / 12</div>
+    </section>
+
+    <!-- Slide 11: Learning Resources -->
+    <section class="slide" id="slide-10">
+        <p class="section-label fade-in">08 · 成长路径</p>
+        <h2 class="slide-title fade-in">学习资源推荐</h2>
+
+        <div class="two-col">
+            <div class="compare-card fade-in">
+                <h3 class="compare-title">📚 推荐学习内容</h3>
+                <ul class="compare-list">
+                    <li>
+                        <span class="compare-label">线束设计基础</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">汽车电气系统原理</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">供应商管理知识</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">商务谈判技巧</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">客户关系管理</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="compare-card fade-in">
+                <h3 class="compare-title">💡 实践建议</h3>
+                <ul class="compare-list">
+                    <li>
+                        <span class="compare-label">跟线学习：跟一次完整生产流程</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">跟客学习：陪同拜访客户技术对接</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">问题复盘：每次问题后写总结</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">技术考级：考取线束工程师证书</span>
+                    </li>
+                    <li>
+                        <span class="compare-label">跨部门轮岗：了解采购/品质基础</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide-number">11 / 12</div>
+    </section>
+
+    <!-- Slide 12: Contact -->
+    <section class="slide cover" id="slide-11">
+        <p class="section-label" style="color: var(--accent);">END · 联系方式</p>
+        <h2 class="main-title" style="font-size: 3rem;">Q & A</h2>
+        <p class="subtitle">培训内容到此结束，欢迎提问交流</p>
+
+        <div class="contact-grid">
+            <div class="contact-item">
+                <div class="contact-icon">👔</div>
+                <div class="contact-label">业务部负责人</div>
+                <div class="contact-value">[待补充]</div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">🔧</div>
+                <div class="contact-label">技术部负责人</div>
+                <div class="contact-value">[待补充]</div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">📅</div>
+                <div class="contact-label">培训日期</div>
+                <div class="contact-value">2026年4月</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 4rem; color: var(--text-muted); font-size: 0.9rem;">
+            青岛弘博电缆有限公司 · 新业务入职培训
+        </div>
+
+        <div class="slide-number">12 / 12</div>
+    </section>
+
+    <script>
+        // Scroll animation
+        const slides = document.querySelectorAll('.slide');
+        const navDots = document.querySelectorAll('.nav-dot');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    const index = Array.from(slides).indexOf(entry.target);
+                    navDots.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === index);
+                    });
+                }
+            });
+        }, observerOptions);
+
+        slides.forEach(slide => observer.observe(slide));
+
+        // Nav dot click
+        navDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const slideIndex = parseInt(dot.dataset.slide);
+                slides[slideIndex].scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Initial visibility
+        slides[0].classList.add('visible');
+    </script>
+</body>
+</html>

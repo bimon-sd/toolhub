@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>AI Agent 工具市场 - 产品架构图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e0e0e0; padding: 40px; }
+  h1 { text-align: center; color: #fff; margin-bottom: 10px; font-size: 28px; }
+  .subtitle { text-align: center; color: #888; margin-bottom: 40px; font-size: 14px; }
+  
+  .diagram { max-width: 1200px; margin: 0 auto; }
+  
+  .layer { margin-bottom: 50px; }
+  .layer-title { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; padding-left: 5px; }
+  
+  .row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+  
+  .box {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 20px;
+    min-width: 180px;
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+  .box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .box:hover::before { opacity: 1; }
+  
+  .box h3 { font-size: 14px; color: #00d4ff; margin-bottom: 8px; }
+  .box p { font-size: 12px; color: #888; line-height: 1.5; }
+  
+  .box.highlight { border-color: #7b2cbf; }
+  .box.highlight h3 { color: #a855f7; }
+  
+  .box.core { border-color: #f59e0b; }
+  .box.core h3 { color: #f59e0b; }
+  
+  .arrow-down {
+    text-align: center;
+    font-size: 20px;
+    color: #333;
+    margin: -10px 0;
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Connector lines */
+  .connector {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+  }
+  .connector-line {
+    width: 2px;
+    height: 40px;
+    background: linear-gradient(to bottom, #333, #7b2cbf);
+  }
+  .connector-dot {
+    width: 12px;
+    height: 12px;
+    background: #7b2cbf;
+    border-radius: 50%;
+    margin: 0 auto;
+    box-shadow: 0 0 20px #7b2cbf;
+  }
+  
+  /* Flow section */
+  .flow { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; }
+  .flow-item { display: flex; align-items: center; gap: 10px; }
+  .flow-step {
+    background: #1a1a2e;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 12px;
+    color: #ccc;
+  }
+  .flow-arrow { color: #7b2cbf; font-size: 16px; }
+  
+  /* Legend */
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 40px 0;
+    padding: 20px;
+    background: #0d0d15;
+    border-radius: 10px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #888; }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .legend-dot.buyer { background: #00d4ff; }
+  .legend-dot.seller { background: #a855f7; }
+  .legend-dot.core { background: #f59e0b; }
+</style>
+</head>
+<body>
+
+<h1>AI Agent 工具市场</h1>
+<p class="subtitle">AI Agent 的 App Store — 让 AI 工具被 AI 发现、购买、使用</p>
+
+<div class="diagram">
+
+<!-- 买家层 -->
+<div class="layer">
+  <div class="layer-title">买家 — AI Agent</div>
+  <div class="row">
+    <div class="box">
+      <h3>🤖 AI Agent</h3>
+      <p>需要工具来完成任务的 AI Agent，可以是 LangChain Agent、AutoGPT、自研机器人</p>
+    </div>
+    <div class="box">
+      <h3>🔍 工具发现</h3>
+      <p>通过语义搜索找到需要的工具，用自然语言描述需求，AI 自动匹配</p>
+    </div>
+    <div class="box">
+      <h3>⚡ 一键调用</h3>
+      <p>获取 API/CLI 调用指令，立即执行，无需人工干预</p>
+    </div>
+    <div class="box">
+      <h3>💳 自动结算</h3>
+      <p>按调用次数或订阅付费，全程自动化，无需人工审核</p>
+    </div>
+  </div>
+</div>
+
+<div class="connector">
+  <div class="connector-line"></div>
+  <div class="connector-dot"></div>
+</div>
+
+<!-- 市场核心层 -->
+<div class="layer">
+  <div class="layer-title">市场核心</div>
+  <div class="row">
+    <div class="box core">
+      <h3>📦 工具索引</h3>
+      <p>收录所有 AI-Ready 工具，提供标准化描述文件，让 AI 能读懂每个工具</p>
+    </div>
+    <div class="box core">
+      <h3>🎯 智能匹配</h3>
+      <p>理解 AI Agent 的需求，匹配最合适的工具，返回调用指令</p>
+    </div>
+    <div class="box core">
+      <h3>📡 调用网关</h3>
+      <p>统一接收 AI 请求，路由到对应工具 API，监控调用质量</p>
+    </div>
+    <div class="box core">
+      <h3>📊 数据反馈</h3>
+      <p>收集调用成功率、响应时间、用户反馈，优化推荐算法</p>
+    </div>
+  </div>
+</div>
+
+<div class="connector">
+  <div class="connector-line"></div>
+  <div class="connector-dot"></div>
+</div>
+
+<!-- 卖家层 -->
+<div class="layer">
+  <div class="layer-title">卖家 — 工具开发者</div>
+  <div class="row">
+    <div class="box highlight">
+      <h3>🏪 工具上架</h3>
+      <p>提交工具 + AI-Ready 描述文件（YAML/JSON），说明输入输出、能力范围</p>
+    </div>
+    <div class="box highlight">
+      <h3>📝 能力定义</h3>
+      <p>用标准化格式描述工具：CLI 指令、API 接口、价格、使用示例</p>
+    </div>
+    <div class="box highlight">
+      <h3>💰 收益管理</h3>
+      <p>设置定价策略，查看调用量统计，自动结算收益</p>
+    </div>
+    <div class="box highlight">
+      <h3>📈 流量分析</h3>
+      <p>看工具被多少 AI Agent 调用，监控调用成功率，优化工具</p>
+    </div>
+  </div>
+</div>
+
+<!-- 数据流向 -->
+<div class="layer">
+  <div class="layer-title">核心数据流</div>
+  <div class="flow">
+    <div class="flow-item">
+      <div class="flow-step">AI 说"我要转录音频"</div>
+      <span class="flow-arrow">→</span>
+    </div>
+    <div class="flow-item">
+      <div class="flow-step">市场匹配 faster-whisper</div>
+      <span class="flow-arrow">→</span>
+    </div>
+    <div class="flow-item">
+      <div class="flow-step">返回调用指令</div>
+      <span class="flow-arrow">→</span>
+    </div>
+    <div class="flow-item">
+      <div class="flow-step">AI 执行并付费</div>
+      <span class="flow-arrow">→</span>
+    </div>
+    <div class="flow-item">
+      <div class="flow-step">数据反馈优化</div>
+    </div>
+  </div>
+</div>
+
+<!-- 图例 -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot buyer"></div>买家（AI Agent）侧</div>
+  <div class="legend-item"><div class="legend-dot core"></div>市场核心功能</div>
+  <div class="legend-item"><div class="legend-dot seller"></div>卖家（开发者）侧</div>
+</div>
+
+<!-- 关键数字 -->
+<div class="layer">
+  <div class="layer-title">市场规模（目标）</div>
+  <div class="row" style="max-width: 800px; margin: 0 auto;">
+    <div class="box" style="text-align: center; flex: 1;">
+      <h3 style="font-size: 32px; color: #00d4ff;">10K+</h3>
+      <p>AI-Ready 工具</p>
+    </div>
+    <div class="box" style="text-align: center; flex: 1;">
+      <h3 style="font-size: 32px; color: #a855f7;">1M+</h3>
+      <p>AI Agent 买家</p>
+    </div>
+    <div class="box" style="text-align: center; flex: 1;">
+      <h3 style="font-size: 32px; color: #f59e0b;">99.9%</h3>
+      <p>调用成功率</p>
+    </div>
+  </div>
+</div>
+
+</div>
+
+</body>
+</html>
