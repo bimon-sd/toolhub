@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+:root {
+  --bg-primary: #0D3B3B;
+  --bg-secondary: #1A4D4D;
+  --bg-card: #0F4242;
+  --text-orange: #E67E22;
+  --text-orange-hover: #F39C12;
+  --text-white: #FFFFFF;
+  --text-muted: #8FBBBB;
+  --border-color: #2A5E5E;
+}
+
+@theme inline {
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-card: var(--bg-card);
+  --color-text-orange: var(--text-orange);
+  --color-text-orange-hover: var(--text-orange-hover);
+  --color-text-white: var(--text-white);
+  --color-text-muted: var(--text-muted);
+  --color-border: var(--border-color);
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-white);
+  font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+}
+
+/* AI-Ready Tool Card Hover Effect */
+.tool-card {
+  transition: all 0.2s ease;
+}
+.tool-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(230, 126, 34, 0.15);
+}
+
+/* Code/CLI style text */
+.code-font {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-orange);
+}
