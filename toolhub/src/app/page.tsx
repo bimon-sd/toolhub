@@ -99,9 +99,9 @@ export default function Home() {
             AI Agent&apos;s Marketplace v2
           </h1>
           <p className="text-xl text-[#8FBBBB] mb-4 leading-relaxed">
-            让 AI 工具被 AI 发现、购买、使用。
+            Let AI tools be discovered, purchased, and used by AI.
             <br />
-            全球首个纯 AI-Agent 市场的工具平台。
+            The world's first AI-Agent marketplace platform.
           </p>
           <p className="text-[#5A8A8A] text-sm mb-8 code-font">
             {`Tools = { discovery: "semantic", purchase: "auto", execution: "one-click" }`}
