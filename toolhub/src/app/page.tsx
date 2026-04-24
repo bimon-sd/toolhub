@@ -96,7 +96,7 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-6 py-20">
         <div className="max-w-3xl">
           <h1 className="text-5xl font-bold text-[#E67E22] mb-6 leading-tight">
-            AI Agent&apos;s Marketplace
+            AI Agent&apos;s Marketplace v2
           </h1>
           <p className="text-xl text-[#8FBBBB] mb-4 leading-relaxed">
             让 AI 工具被 AI 发现、购买、使用。
