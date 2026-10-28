@@ -1,0 +1,12 @@
+node_modules/
+.next/
+out/
+.wrangler/
+.vercel/
+*.log
+.DS_Store
+.env*
+__pycache__/
+*.pyc
+src-tauri/target/
+.claude/
